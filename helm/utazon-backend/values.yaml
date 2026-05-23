@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/dirdr/utazon-backend
-  tag: "sha-7728660"  # auto-updated by CI
+  tag: "sha-7728660"
   pullPolicy: Always
 
 service:
@@ -26,11 +26,12 @@ resources:
 
 securityContext:
   runAsNonRoot: true
-  readOnlyRootFilesystem: true
+  runAsUser: 1001
+  runAsGroup: 65534
   allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
   capabilities:
-    drop:
-      - ALL
+    drop: ["ALL"]
 
 env:
   RUST_LOG: "utazon_backend=info,tower_http=info,tower=warn"
