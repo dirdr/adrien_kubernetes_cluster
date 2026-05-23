@@ -12,7 +12,7 @@ spec:
   sources:
     - repoURL: https://charts.christianhuth.de
       chart: umami
-      targetRevision: 7.7.2
+      targetRevision: 7.9.4
       helm:
         valueFiles:
           - $values/helm/umami/values.yaml
