@@ -1,6 +1,78 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:base",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "timezone": "Europe/Paris",
+  "schedule": ["every weekend"],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "rebaseWhen": "conflicted",
+  "argocd": {
+    "fileMatch": ["^apps/[^/]+\\.ya?ml$", "^bootstrap/[^/]+\\.ya?ml$"]
+  },
+  "helm-values": {
+    "fileMatch": ["^helm/[^/]+/values\\.ya?ml$"]
+  },
+  "helmv3": {
+    "fileMatch": ["^helm/[^/]+/Chart\\.ya?ml$"]
+  },
+  "kubernetes": {
+    "fileMatch": ["^helm/[^/]+/templates/[^/]+\\.ya?ml$"]
+  },
+  "github-actions": {
+    "fileMatch": ["^\\.github/workflows/[^/]+\\.ya?ml$"]
+  },
+  "packageRules": [
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "matchDatasources": ["helm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "helm-charts"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "github-actions",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "matchPackageNames": ["k3s-io/k3s"],
+      "groupName": "k3s",
+      "schedule": ["on the first day of the month"]
+    },
+    {
+      "matchPackageNames": ["kube-prometheus-stack", "traefik", "loki"],
+      "automerge": false,
+      "dependencyDashboardApproval": true
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "labels": ["major-update"],
+      "automerge": false,
+      "dependencyDashboardApproval": true
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^helm/[^/]+/values\\.ya?ml$"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+) depName=(?<depName>[^\\s]+)(?: versioning=(?<versioning>[^\\s]+))?\\s+(?:tag|version|imageTag):\\s*(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "{{datasource}}",
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    }
   ]
 }

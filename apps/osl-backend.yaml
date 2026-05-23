@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: osl-backend
+spec:
+  source:
+    repoURL: https://github.com/openstreetlifting/openstreetlifting
+    targetRevision: main
+    path: backend/helm
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: backend
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
