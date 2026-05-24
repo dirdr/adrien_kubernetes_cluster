@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/dirdr/utazon-backend
-  tag: "sha-b3f7966"
+  tag: "sha-a9b47bf"
   pullPolicy: Always
 
 service:
