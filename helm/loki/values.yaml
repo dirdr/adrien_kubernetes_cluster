@@ -22,7 +22,6 @@ singleBinary:
     enabled: true
     size: 10Gi
 
-# Disable distributed components (not needed for single-node)
 read:
   replicas: 0
 write:

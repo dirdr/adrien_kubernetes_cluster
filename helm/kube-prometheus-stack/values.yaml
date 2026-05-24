@@ -14,6 +14,13 @@ grafana:
     - name: Loki
       type: loki
       url: http://loki.monitoring.svc.cluster.local:3100
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi
 
 prometheus:
   prometheusSpec:
@@ -26,6 +33,14 @@ prometheus:
             requests:
               storage: 20Gi
 
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+
 alertmanager:
   alertmanagerSpec:
     storage:
@@ -36,11 +51,44 @@ alertmanager:
           resources:
             requests:
               storage: 2Gi
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
 
-# k3s does not expose these endpoints — disabling avoids noisy false DOWN alerts
 kubeEtcd:
   enabled: false
 kubeControllerManager:
   enabled: false
 kubeScheduler:
   enabled: false
+
+prometheusOperator:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+kube-state-metrics:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+prometheus-node-exporter:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
