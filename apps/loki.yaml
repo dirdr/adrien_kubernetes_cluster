@@ -16,7 +16,7 @@ spec:
       helm:
         valueFiles:
           - $values/helm/loki/values.yaml
-    - repoURL: git@github.com:dirdr/iac.git
+    - repoURL: git@github.com:dirdr/adrien_kubernetes_cluster.git
       targetRevision: HEAD
       ref: values
   destination:
