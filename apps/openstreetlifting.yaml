@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: git@github.com:openstreetlifting/openstreetlifting.git
+    repoURL: https://github.com/openstreetlifting/openstreetlifting.git
     targetRevision: main
     path: charts/openstreetlifting
     helm:
