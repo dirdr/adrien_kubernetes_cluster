@@ -76,9 +76,9 @@ jobs:
 
       - name: Validate openstreetlifting
         run: |
-          helm template helm/openstreetlifting \
+          helm template charts/ \
             | kubeconform -strict -summary -output json \
-              -skip HelmChartConfig
+              -skip SealedSecret
 
   detect-secrets:
     name: Secret Leak Detection
