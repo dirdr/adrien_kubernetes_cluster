@@ -1,71 +1,58 @@
 name: CI
-
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
 jobs:
   yaml-lint:
     name: YAML Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-
       - name: Install yamllint
         run: pip install yamllint
-
       - name: Run yamllint
         run: yamllint -c .yamllint.yaml .
-
   helm-lint:
     name: Helm Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-
       - name: Install Helm
         run: curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
       - name: Lint utazon-backend
         run: helm lint helm/utazon-backend
-
       - name: Lint traefik-config
         run: helm lint helm/traefik-config
-
       - name: Lint umami-secrets
         run: helm lint helm/umami-secrets
-
-      - name: Lint osl
-        run: helm lint helm/openstreetlifting
-
   kube-validate:
     name: Kubernetes Validation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-
       - name: Install Helm
         run: curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
       - name: Install kubeconform
         run: |
           curl -fsSL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz \
             | tar xz -C /usr/local/bin
-
       - name: Validate utazon-backend
         run: |
           helm template helm/utazon-backend \
             | kubeconform -strict -summary -output json \
               -skip SealedSecret
-
       - name: Validate traefik-config
         run: |
           helm template helm/traefik-config \
             | kubeconform -strict -summary -output json \
               -skip HelmChartConfig
-
+      - name: Validate umami-secrets
+        run: |
+          helm template helm/umami-secrets \
+            | kubeconform -strict -summary -output json \
+              -skip SealedSecret
       - name: Validate ArgoCD applications
         run: |
           kubeconform -strict -summary -output json \
@@ -73,7 +60,6 @@ jobs:
             -ignore-filename-pattern '.*values.*\.yaml' \
             -ignore-filename-pattern '.*sealedsecret.*\.yaml' \
             apps/
-
   detect-secrets:
     name: Secret Leak Detection
     runs-on: ubuntu-latest
@@ -81,7 +67,6 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
-
       - name: Install Gitleaks
         run: |
           GITLEAKS_VERSION=$(gh api repos/gitleaks/gitleaks/releases/latest --jq '.tag_name' | sed 's/^v//')
@@ -89,6 +74,5 @@ jobs:
             | tar xz -C /usr/local/bin gitleaks
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Run Gitleaks
         run: gitleaks detect --source . -v -c .gitleaks.toml
