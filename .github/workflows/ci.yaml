@@ -37,6 +37,9 @@ jobs:
       - name: Lint umami-secrets
         run: helm lint helm/umami-secrets
 
+      - name: Lint osl
+        run: helm lint helm/openstreetlifting
+
   kube-validate:
     name: Kubernetes Validation
     runs-on: ubuntu-latest
@@ -67,6 +70,8 @@ jobs:
         run: |
           kubeconform -strict -summary -output json \
             -skip Application \
+            -ignore-filename-pattern '.*values.*\.yaml' \
+            -ignore-filename-pattern '.*sealedsecret.*\.yaml' \
             apps/
 
   detect-secrets:

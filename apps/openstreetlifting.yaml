@@ -3,6 +3,10 @@ kind: Application
 metadata:
   name: openstreetlifting
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   sources:
@@ -12,7 +16,7 @@ spec:
       helm:
         valueFiles:
           - values.yaml
-          - $values/apps/openstreetlifting/values-prod.yaml
+          - $values/helm/openstreetlifting/values-prod.yaml
     - repoURL: https://github.com/dirdr/adrien_kubernetes_cluster.git
       targetRevision: HEAD
       ref: values
