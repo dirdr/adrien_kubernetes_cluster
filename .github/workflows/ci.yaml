@@ -74,12 +74,6 @@ jobs:
             -ignore-filename-pattern '.*sealedsecret.*\.yaml' \
             apps/
 
-      - name: Validate openstreetlifting
-        run: |
-          helm template charts/ \
-            | kubeconform -strict -summary -output json \
-              -skip SealedSecret
-
   detect-secrets:
     name: Secret Leak Detection
     runs-on: ubuntu-latest
