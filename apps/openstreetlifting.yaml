@@ -12,7 +12,7 @@ spec:
   sources:
     - repoURL: https://github.com/openstreetlifting/openstreetlifting.git
       targetRevision: main
-      path: charts/openstreetlifting
+      path: charts/
       helm:
         valueFiles:
           - values.yaml
