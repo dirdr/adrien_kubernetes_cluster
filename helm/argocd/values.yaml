@@ -15,3 +15,24 @@ server:
 
 notifications:
   enabled: false
+
+controller:
+  resources:
+    requests:
+      memory: 256Mi
+    limits:
+      memory: 768Mi
+
+server:
+  resources:
+    requests:
+      memory: 64Mi
+    limits:
+      memory: 256Mi
+
+repoServer:
+  resources:
+    requests:
+      memory: 64Mi
+    limits:
+      memory: 256Mi
