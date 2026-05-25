@@ -5,13 +5,17 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://github.com/openstreetlifting/openstreetlifting.git
-    targetRevision: main
-    path: charts/openstreetlifting
-    helm:
-      valueFiles:
-        - values.yaml
+  sources:
+    - repoURL: https://github.com/openstreetlifting/openstreetlifting.git
+      targetRevision: main
+      path: charts/openstreetlifting
+      helm:
+        valueFiles:
+          - values.yaml
+          - $values/apps/openstreetlifting/values-prod.yaml
+    - repoURL: https://github.com/dirdr/adrien_kubernetes_cluster.git
+      targetRevision: HEAD
+      ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: osl
