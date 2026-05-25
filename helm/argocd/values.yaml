@@ -12,9 +12,11 @@ server:
       traefik.ingress.kubernetes.io/router.tls: "true"
       traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
     tls: false
-
-notifications:
-  enabled: false
+  resources:
+    requests:
+      memory: 64Mi
+    limits:
+      memory: 256Mi
 
 controller:
   resources:
@@ -23,16 +25,12 @@ controller:
     limits:
       memory: 768Mi
 
-server:
-  resources:
-    requests:
-      memory: 64Mi
-    limits:
-      memory: 256Mi
-
 repoServer:
   resources:
     requests:
       memory: 64Mi
     limits:
       memory: 256Mi
+
+notifications:
+  enabled: false
