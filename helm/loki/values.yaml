@@ -1,5 +1,4 @@
 deploymentMode: SingleBinary
-
 loki:
   auth_enabled: false
   commonConfig:
@@ -15,24 +14,37 @@ loki:
         index:
           prefix: index_
           period: 24h
-
 singleBinary:
   replicas: 1
   persistence:
     enabled: true
     size: 10Gi
-
+  resources:
+    requests:
+      memory: 128Mi
+    limits:
+      memory: 256Mi
 read:
   replicas: 0
 write:
   replicas: 0
 backend:
   replicas: 0
-
-# Disable unused extras
 lokiCanary:
   enabled: false
 gateway:
   enabled: false
 test:
   enabled: false
+chunksCache:
+  resources:
+    requests:
+      memory: 64Mi
+    limits:
+      memory: 128Mi
+resultsCache:
+  resources:
+    requests:
+      memory: 32Mi
+    limits:
+      memory: 64Mi

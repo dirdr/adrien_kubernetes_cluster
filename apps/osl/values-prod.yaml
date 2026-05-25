@@ -1,0 +1,10 @@
+backend:
+  config:
+    logFormat: "json"
+    db:
+      host: "51.195.101.173"
+
+ingress:
+  frontendHost: "openstreetlifting.org"
+  backendHost: "api.openstreetlifting.org"
+  tls: true
