@@ -1,0 +1,9 @@
+cluster:
+  # Raise to 2 or more once the cluster has more than one node. On a single
+  # node a second instance doubles the storage without buying availability.
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.4-system-trixie
+  storage:
+    size: 10Gi
+  database: appdb
+  owner: appuser

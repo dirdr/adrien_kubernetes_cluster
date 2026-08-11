@@ -1,0 +1,4 @@
+apiVersion: v2
+name: osl-postgres
+version: 0.1.0
+description: Postgres cluster for OpenStreetLifting
