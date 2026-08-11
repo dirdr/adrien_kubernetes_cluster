@@ -1,0 +1,14 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: osl-postgres
+  namespace: {{ .Release.Namespace }}
+spec:
+  instances: {{ .Values.cluster.instances }}
+  imageName: {{ .Values.cluster.imageName }}
+  storage:
+    size: {{ .Values.cluster.storage.size }}
+  bootstrap:
+    initdb:
+      database: {{ .Values.cluster.database }}
+      owner: {{ .Values.cluster.owner }}

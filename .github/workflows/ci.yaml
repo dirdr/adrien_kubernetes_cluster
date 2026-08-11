@@ -27,6 +27,8 @@ jobs:
         run: helm lint helm/traefik-config
       - name: Lint umami-secrets
         run: helm lint helm/umami-secrets
+      - name: Lint osl-postgres
+        run: helm lint helm/osl-postgres
   kube-validate:
     name: Kubernetes Validation
     runs-on: ubuntu-latest
@@ -53,6 +55,11 @@ jobs:
           helm template helm/umami-secrets \
             | kubeconform -strict -summary -output json \
               -skip SealedSecret
+      - name: Validate osl-postgres
+        run: |
+          helm template helm/osl-postgres \
+            | kubeconform -strict -summary -output json \
+              -skip Cluster
       - name: Validate ArgoCD applications
         run: |
           kubeconform -strict -summary -output json \
