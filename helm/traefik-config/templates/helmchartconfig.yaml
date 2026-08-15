@@ -7,9 +7,15 @@ spec:
   valuesContent: |-
     ports:
       web:
-        redirectTo:
-          port: websecure
-          priority: 10
+        http:
+          redirections:
+            entryPoint:
+              to: websecure
+              scheme: https
+              permanent: true
+              # Below the ACME challenge router, so certificate renewal is not
+              # redirected away from the web entrypoint.
+              priority: 10
     certResolvers:
       letsencrypt:
         email: {{ .Values.acme.email }}
