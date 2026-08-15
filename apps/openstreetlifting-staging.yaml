@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: openstreetlifting
+  name: openstreetlifting-staging
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "2"
@@ -10,21 +10,19 @@ metadata:
 spec:
   project: default
   sources:
-    # Pinned to the release tag, so a chart change on main cannot reach
-    # production without a release. Bumped by the release workflow.
     - repoURL: https://github.com/openstreetlifting/openstreetlifting.git
-      targetRevision: v0.9.0
+      targetRevision: main
       path: charts/
       helm:
         valueFiles:
           - values.yaml
-          - $values/helm/openstreetlifting/values-production.yaml
+          - $values/helm/openstreetlifting/values-staging.yaml
     - repoURL: https://github.com/dirdr/adrien_kubernetes_cluster.git
       targetRevision: HEAD
       ref: values
   destination:
     server: https://kubernetes.default.svc
-    namespace: osl
+    namespace: osl-staging
   syncPolicy:
     automated:
       prune: true
