@@ -1,8 +1,0 @@
-backend:
-  config:
-    logFormat: "json"
-
-ingress:
-  frontendHost: "openstreetlifting.org"
-  backendHost: "api.openstreetlifting.org"
-  tls: true

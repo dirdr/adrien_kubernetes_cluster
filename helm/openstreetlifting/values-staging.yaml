@@ -1,0 +1,27 @@
+environment: staging
+frontend:
+  image:
+    tag: "sha-f59ec28"
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+backend:
+  image:
+    tag: "sha-f59ec28"
+  # A SealedSecret is scoped to one namespace, so the production ciphertext
+  # cannot be reused here. Nothing reads API_KEYS yet, so staging runs without
+  # it until something does.
+  existingSecret: ""
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+importer:
+  image:
+    tag: "sha-f59ec28"
+ingress:
+  frontendHost: "staging.openstreetlifting.org"
+  backendHost: "api-staging.openstreetlifting.org"
+  tls: true
+  noindex: true
