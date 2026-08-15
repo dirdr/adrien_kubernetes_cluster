@@ -1,0 +1,5 @@
+cluster:
+  # Staging is rebuilt from the canonical files on every deploy, so it never
+  # holds anything worth sizing for.
+  storage:
+    size: 5Gi
