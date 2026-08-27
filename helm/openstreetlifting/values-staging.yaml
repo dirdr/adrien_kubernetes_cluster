@@ -1,7 +1,7 @@
 environment: staging
 frontend:
   image:
-    tag: "sha-5d3bf2f"
+    tag: "sha-edc7e79"
   resources:
     limits:
       cpu: 250m
