@@ -2,17 +2,17 @@
 environment: production
 frontend:
   image:
-    tag: "0.18.0"
+    tag: "0.19.0"
 backend:
   image:
-    tag: "0.18.0"
+    tag: "0.19.0"
   existingSecret: osl-backend-secret
   sealedSecret:
     encryptedData:
       API_KEYS: AgCo9k+sdkk7HzVWZvhZ03dSJfsspett6kM6sJG08slRxXvdi5/tktOO1h/G8AwJuZMctYn0nVB68TgjrjlMxTm24Mh+x3JN6e6pRyXkL56mVFaYtCfBFfVGT+JOaCAVv3Du9smd0OmveclkVMAv+AUORMGsFX9f0tYEGw/V7wloPPsdd9KdxTLRhIFUdDsA5oiZTmH0jPqriO4h1byMo923pxQie4J4eD9I8Gc1T/P4eC51DeURJR0byD09UEuPopeDQgA1TCFJcTtyh9hY2X5Twf+ZzVB3VjDfJbRB6f8UGI1iL3jrT/CRApKYGIXMTRmde3WUOQ4GwKeabUqIuRHTlQ8FPSHkOcO/ajeBMxX4vPZQzkNd1rFFFvud/qqgvDqjhTIuyexFjpYITxWyMnKF1jHYvqfQGk109YkzAk305FI5kSSj91ewrESsLIP5UPlaGQrL5ic3u4E+L5W3OLgcBp+nFxt7k/5hwT1TuultzTOcFfxSwH7f7kPmAfOlJtoyXAm0778MsXlkmb+ify/Ebw5aPSsIPJBYoMu7xHpsacJFxB7fWmzc6EWTSWaMLtv97ohbHO+b+TBSabJkqeQEdQ6JsLCrG7pPplT3VJWEkJr6bkc7DkNGHgtVhGtqzgAbaG1aXeXjM+tK4wY5VCgd/bj/4ovpZ2qxR2M+fxnaccFl0ZZFeJiad8vraW75xBJjOG31zcuJBsNWS1ZNjngif0fCsRp+a25AD8mkq/4wqAEjrC4LsXBX+aOqMQ==
 importer:
   image:
-    tag: "0.18.0"
+    tag: "0.19.0"
 ingress:
   frontendHost: "openstreetlifting.org"
   backendHost: "api.openstreetlifting.org"
