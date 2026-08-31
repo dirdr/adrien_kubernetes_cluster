@@ -8,7 +8,7 @@ frontend:
       memory: 256Mi
 backend:
   image:
-    tag: "sha-ef2c89e"
+    tag: "sha-b19be49"
   # A SealedSecret is scoped to one namespace, so the production ciphertext
   # cannot be reused here. Nothing reads API_KEYS yet, so staging runs without
   # it until something does.
@@ -19,7 +19,7 @@ backend:
       memory: 128Mi
 importer:
   image:
-    tag: "sha-ef2c89e"
+    tag: "sha-b19be49"
 ingress:
   frontendHost: "staging.openstreetlifting.org"
   backendHost: "api-staging.openstreetlifting.org"
