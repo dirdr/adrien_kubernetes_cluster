@@ -13,7 +13,7 @@ spec:
     # Pinned to the release tag, so a chart change on main cannot reach
     # production without a release. Bumped by the release workflow.
     - repoURL: https://github.com/openstreetlifting/openstreetlifting.git
-      targetRevision: v0.24.0
+      targetRevision: v0.25.0
       path: charts/
       helm:
         valueFiles:
