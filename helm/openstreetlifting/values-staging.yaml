@@ -1,3 +1,4 @@
+# yamllint disable rule:line-length
 environment: staging
 frontend:
   image:
@@ -29,3 +30,5 @@ ingress:
   backendHost: "api-staging.openstreetlifting.org"
   tls: true
   noindex: true
+  basicAuth:
+    sealedUsers: AgBwfCjk/i16RgVRvv7LOnj7KueSQz4vG36WnSvpl9hXDr7u8TRNAocCUP0oGzUvIR/iFwbMlCbxvTgD4gtjH67tuPuiCf9rxw4fbigEsrQ96Xjc/LKs1CVlVwixScgcXPbMysexDxAq4qR5IwlNsx2dsLWvc5bfvaixMCi1yQCNuoRxiasSd/oNxKKhqCFKo0zG74k2J9Ik/Nx0vvGadqEsuR8AL0Xvx1XKNqN/vdJQMko+7r+hZbHxIQEiSNS3kVbLIB0S98eHdZob+XE6+hmBGIr9ndDSHvkQMiuNK79SHxo66DchJXoDEVvF1HwHWeJJW0fNly9zvAk3zayD6eD5MpxAq1Q2Wn5YRpwKZKsRNA5LUSeQ/8uuiBUCwq7iIIdtmMQLPX2x2bF1rQ5A4V6eOYfv/VmOPrndHSYI2GAklE1M8IHh8bFzBdpkAEF6CP9Xg96VqnRB4z5pQDryEAl5uI6iY3TY0MiahAtXKKfOC+5aZTiyK9dQuORLQrsiDU4BiN9uhzIGXeQ+lv/DKsvHBu5MnUSw4uLWnFMKItK/ZgLyEErSQ5a/wHudTTUxHI6tOGYvxwONsI8Z1l9meyQje2HnPRxEdUiQF20lN14XaQxM1ArGvSByalPPokPq1jEX16eSdk6SWXYf/jTFXwBpf+b/1tVId6dY+uY0b9ErSttYbEHK9IaCjzqiCemFh+37mJuRExNx068VnmPZYdddrMINMpHd7QBhPRvbkSg6X7nCqydpsNOwEVAUqMwZXYc+YGWy5c0RALk6faLR6SyY
