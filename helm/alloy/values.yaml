@@ -1,13 +1,26 @@
 controller:
   type: daemonset
+  volumes:
+    extra:
+      - name: alloy-data
+        hostPath:
+          path: /var/lib/alloy
+          type: DirectoryOrCreate
 
 alloy:
+  storagePath: /var/lib/alloy
+  mounts:
+    varlog: true
+    extra:
+      - name: alloy-data
+        mountPath: /var/lib/alloy
   configMap:
     content: |
       discovery.kubernetes "pods" {
         role = "pod"
-        namespaces {
-          names = ["utazon", "osl", "osl-staging"]
+        selectors {
+          role  = "pod"
+          field = "spec.nodeName=" + sys.env("HOSTNAME")
         }
       }
 
@@ -15,14 +28,9 @@ alloy:
         targets = discovery.kubernetes.pods.targets
 
         rule {
-          source_labels = ["__meta_kubernetes_pod_phase"]
-          regex         = "Succeeded|Failed"
+          source_labels = ["__meta_kubernetes_namespace"]
+          regex         = "kube-system"
           action        = "drop"
-        }
-
-        rule {
-          source_labels = ["__meta_kubernetes_pod_node_name"]
-          target_label  = "__host__"
         }
 
         rule {
@@ -44,10 +52,43 @@ alloy:
           source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
           target_label  = "app"
         }
+
+        rule {
+          source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_pod_container_name"]
+          separator     = "/"
+          target_label  = "job"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+          separator     = "/"
+          replacement   = "/var/log/pods/*$1/*.log"
+          target_label  = "__path__"
+        }
       }
 
-      loki.source.kubernetes "pods" {
-        targets    = discovery.relabel.pod_logs.output
+      local.file_match "pods" {
+        path_targets = discovery.relabel.pod_logs.output
+      }
+
+      loki.source.file "pods" {
+        targets    = local.file_match.pods.targets
+        forward_to = [loki.process.pods.receiver]
+      }
+
+      loki.process "pods" {
+        stage.cri {}
+
+        stage.labels {
+          values = {
+            stream = "",
+          }
+        }
+
+        stage.label_drop {
+          values = ["filename"]
+        }
+
         forward_to = [loki.write.default.receiver]
       }
 
