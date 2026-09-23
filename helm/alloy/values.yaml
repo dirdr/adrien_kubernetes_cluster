@@ -7,11 +7,11 @@ alloy:
       discovery.kubernetes "pods" {
         role = "pod"
         namespaces {
-          names = ["utazon"]
+          names = ["utazon", "osl", "osl-staging"]
         }
       }
 
-      discovery.relabel "utazon_logs" {
+      discovery.relabel "pod_logs" {
         targets = discovery.kubernetes.pods.targets
 
         rule {
@@ -39,10 +39,15 @@ alloy:
           source_labels = ["__meta_kubernetes_pod_container_name"]
           target_label  = "container"
         }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+          target_label  = "app"
+        }
       }
 
-      loki.source.kubernetes "utazon" {
-        targets    = discovery.relabel.utazon_logs.output
+      loki.source.kubernetes "pods" {
+        targets    = discovery.relabel.pod_logs.output
         forward_to = [loki.write.default.receiver]
       }
 
