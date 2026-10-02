@@ -11,7 +11,7 @@ spec:
   project: default
   sources:
     - repoURL: https://github.com/openstreetlifting/openstreetlifting.git
-      targetRevision: 211753afafb8ce1ba75a9b13b11257a767489380
+      targetRevision: 1dcba7986ad350d257e2b86393c4d3f9340ea26c
       path: charts/
       helm:
         valueFiles:
