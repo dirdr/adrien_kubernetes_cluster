@@ -9,7 +9,7 @@ frontend:
       memory: 256Mi
 backend:
   image:
-    tag: "sha-f7ae889"
+    tag: "sha-9f0e74b"
   # A SealedSecret is scoped to one namespace, so the production ciphertext
   # cannot be reused here. Nothing reads API_KEYS yet, so staging runs without
   # it until something does.
@@ -20,7 +20,7 @@ backend:
       memory: 128Mi
 importer:
   image:
-    tag: "sha-f7ae889"
+    tag: "sha-9f0e74b"
   args:
     - competitions
     - ./data/competitions
