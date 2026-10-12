@@ -2,14 +2,14 @@
 environment: staging
 frontend:
   image:
-    tag: "sha-22fc619"
+    tag: "sha-30f834e"
   resources:
     limits:
       cpu: 250m
       memory: 256Mi
 backend:
   image:
-    tag: "sha-4e2ec42"
+    tag: "sha-30f834e"
   # A SealedSecret is scoped to one namespace, so the production ciphertext
   # cannot be reused here. Nothing reads API_KEYS yet, so staging runs without
   # it until something does.
@@ -20,7 +20,7 @@ backend:
       memory: 128Mi
 importer:
   image:
-    tag: "sha-4e2ec42"
+    tag: "sha-30f834e"
   args:
     - competitions
     - ./data/competitions
