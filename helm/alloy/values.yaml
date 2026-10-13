@@ -14,6 +14,17 @@ alloy:
     extra:
       - name: alloy-data
         mountPath: /var/lib/alloy
+
+  extraPorts:
+    - name: otlp-grpc
+      port: 4317
+      targetPort: 4317
+      protocol: TCP
+    - name: otlp-http
+      port: 4318
+      targetPort: 4318
+      protocol: TCP
+
   configMap:
     content: |
       discovery.kubernetes "pods" {
@@ -89,11 +100,63 @@ alloy:
           values = ["filename"]
         }
 
+        stage.match {
+          selector = "{app=\"openstreetlifting-backen\"}"
+
+          stage.json {
+            expressions = { trace_id = "trace_id" }
+          }
+
+          stage.structured_metadata {
+            values = { trace_id = "" }
+          }
+        }
+
         forward_to = [loki.write.default.receiver]
       }
 
       loki.write "default" {
         endpoint {
           url = "http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push"
+        }
+      }
+
+      otelcol.receiver.otlp "default" {
+        grpc { endpoint = "0.0.0.0:4317" }
+        http { endpoint = "0.0.0.0:4318" }
+
+        output {
+          traces = [otelcol.processor.memory_limiter.default.input]
+        }
+      }
+
+      otelcol.processor.memory_limiter "default" {
+        check_interval         = "1s"
+        limit_percentage       = 80
+        spike_limit_percentage = 20
+
+        output {
+          traces = [otelcol.processor.k8sattributes.default.input]
+        }
+      }
+
+      otelcol.processor.k8sattributes "default" {
+        output {
+          traces = [otelcol.processor.batch.default.input]
+        }
+      }
+
+      otelcol.processor.batch "default" {
+        output {
+          traces = [otelcol.exporter.otlp.tempo.input]
+        }
+      }
+
+      otelcol.exporter.otlp "tempo" {
+        client {
+          endpoint = "tempo.observability.svc.cluster.local:4317"
+          tls {
+            insecure = true
+          }
         }
       }
