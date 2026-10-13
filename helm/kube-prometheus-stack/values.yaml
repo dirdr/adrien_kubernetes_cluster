@@ -18,6 +18,17 @@ grafana:
     - name: Loki
       type: loki
       url: http://loki.monitoring.svc.cluster.local:3100
+    - name: Tempo
+      type: tempo
+      uid: tempo
+      url: http://tempo.monitoring.svc.cluster.local:3200
+      access: proxy
+      jsonData:
+        tracesToLogsV2:
+          datasourceUid: loki
+          filterByTraceID: true
+          spanStartTimeShift: "-5m"
+          spanEndTimeShift: "5m"
   resources:
     requests:
       cpu: 50m
