@@ -27,7 +27,7 @@ spec:
             pathType: {{ .pathType | default "Prefix" }}
             backend:
               service:
-                name: {{ include "stalwart.fullname" $ }}
+                name: {{ include "stalwart.fullname" $ }}-web
                 port:
                   name: {{ .portName | default "https" }}
           {{- end }}

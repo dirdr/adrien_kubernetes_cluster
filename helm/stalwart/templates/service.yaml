@@ -21,6 +21,9 @@ metadata:
     {{- include "stalwart.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | default "Local" }}
+  {{- end }}
   selector:
     {{- include "stalwart.selectorLabels" . | nindent 4 }}
   ports:
@@ -48,6 +51,18 @@ spec:
     - name: sieve
       port: {{ .Values.service.ports.sieve }}
       targetPort: sieve
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "stalwart.fullname" . }}-web
+  labels:
+    {{- include "stalwart.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "stalwart.selectorLabels" . | nindent 4 }}
+  ports:
     {{- if .Values.service.ports.http }}
     - name: http
       port: {{ .Values.service.ports.http }}
