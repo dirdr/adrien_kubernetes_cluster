@@ -51,6 +51,8 @@ config:
 # the HTTP listeners only.
 service:
   type: LoadBalancer
+  # Preserve remote IPs for SPF, reverse DNS checks, and abuse protection.
+  externalTrafficPolicy: Local
   ports:
     smtp: 25
     smtps: 465
@@ -60,6 +62,7 @@ service:
     pop3: 110
     pop3s: 995
     sieve: 4190
+    # HTTP ports are exposed through the internal web Service only.
     mgmt: 8080
 
 ingress:
