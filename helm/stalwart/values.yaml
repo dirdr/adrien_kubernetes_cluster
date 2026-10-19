@@ -29,9 +29,14 @@ recoveryMode:
   port: 8080
   logLevel: info
 
-# Extra environment variables injected into the container, for
-# store credentials that live in plain text.
-extraEnv: {}
+# Extra environment variables as plain values or Kubernetes EnvVar sources.
+# Create the smtp-relay Secret in this namespace before deploying.
+extraEnv:
+  RELAY_SMTP_PASSWORD:
+    valueFrom:
+      secretKeyRef:
+        name: smtp-relay
+        key: password
 
 # Extra environment variables injected from the managed Secret.
 # Use this for anything sensitive (database passwords, S3 keys, etc.).

@@ -51,7 +51,11 @@ spec:
             {{- end }}
             {{- range $key, $value := .Values.extraEnv }}
             - name: {{ $key }}
+              {{- if kindIs "map" $value }}
+              {{- toYaml $value | nindent 14 }}
+              {{- else }}
               value: {{ $value | quote }}
+              {{- end }}
             {{- end }}
           envFrom:
             - secretRef:
