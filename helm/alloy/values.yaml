@@ -101,14 +101,40 @@ alloy:
         }
 
         stage.match {
-          selector = "{app=\"openstreetlifting-backen\"}"
+          selector = "{app=~\"openstreetlifting-(backend|frontend|importer)\"}"
 
           stage.json {
-            expressions = { trace_id = "trace_id" }
+            expressions = {
+              trace_id     = "trace_id",
+              span_id      = "span_id",
+              logger       = "logger",
+              timestamp    = "timestamp",
+              severity     = "severity_text",
+              service_name = "resource.\"service.name\"",
+              environment  = "resource.\"deployment.environment.name\"",
+            }
+          }
+
+          stage.timestamp {
+            source            = "timestamp"
+            format            = "RFC3339Nano"
+            action_on_failure = "skip"
+          }
+
+          stage.labels {
+            values = {
+              severity     = "",
+              service_name = "",
+              environment  = "",
+            }
           }
 
           stage.structured_metadata {
-            values = { trace_id = "" }
+            values = {
+              trace_id = "",
+              span_id  = "",
+              logger   = "",
+            }
           }
         }
 
@@ -154,7 +180,7 @@ alloy:
 
       otelcol.exporter.otlp "tempo" {
         client {
-          endpoint = "tempo.observability.svc.cluster.local:4317"
+          endpoint = "tempo.monitoring.svc.cluster.local:4317"
           tls {
             insecure = true
           }

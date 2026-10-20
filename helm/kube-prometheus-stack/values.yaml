@@ -17,6 +17,14 @@ grafana:
   additionalDataSources:
     - name: Loki
       type: loki
+      uid: loki
+      jsonData:
+        derivedFields:
+          - name: TraceID
+            matcherRegex: '"trace_id"\s*:\s*"([0-9a-f]{32})"'
+            datasourceUid: tempo
+            url: '$${__value.raw}'
+            urlDisplayLabel: View trace
       url: http://loki.monitoring.svc.cluster.local:3100
     - name: Tempo
       type: tempo
@@ -26,6 +34,9 @@ grafana:
       jsonData:
         tracesToLogsV2:
           datasourceUid: loki
+          tags:
+            - key: service.name
+              value: service_name
           filterByTraceID: true
           spanStartTimeShift: "-5m"
           spanEndTimeShift: "5m"
