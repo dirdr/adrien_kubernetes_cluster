@@ -9,7 +9,7 @@ frontend:
       memory: 256Mi
 backend:
   image:
-    tag: "sha-127f988"
+    tag: "sha-44e6166"
   existingSecret: ""
   resources:
     limits:
@@ -17,7 +17,7 @@ backend:
       memory: 128Mi
 importer:
   image:
-    tag: "sha-127f988"
+    tag: "sha-44e6166"
   args:
     - competitions
     - ./data/competitions
