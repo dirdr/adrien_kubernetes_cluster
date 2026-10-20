@@ -1,9 +1,17 @@
 # yamllint disable rule:line-length
 environment: production
+telemetry:
+  otlpEndpoint: http://alloy.monitoring.svc.cluster.local:4318
+  traceSampler: parentbased_traceidratio
+  traceSampleRatio: "1.0"
 frontend:
   image:
     tag: "0.56.0"
 backend:
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack
   image:
     tag: "0.56.0"
   existingSecret: osl-backend-secret

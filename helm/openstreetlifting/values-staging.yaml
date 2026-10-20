@@ -1,5 +1,9 @@
 # yamllint disable rule:line-length
 environment: staging
+telemetry:
+  otlpEndpoint: http://alloy.monitoring.svc.cluster.local:4318
+  traceSampler: parentbased_traceidratio
+  traceSampleRatio: "1.0"
 frontend:
   image:
     tag: "sha-e342b99"
@@ -8,6 +12,10 @@ frontend:
       cpu: 250m
       memory: 256Mi
 backend:
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack
   image:
     tag: "sha-44e6166"
   existingSecret: ""
