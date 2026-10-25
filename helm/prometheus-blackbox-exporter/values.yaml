@@ -1,0 +1,163 @@
+fullnameOverride: osl-blackbox
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 64Mi
+
+config:
+  modules:
+    osl_https_website:
+      prober: http
+      timeout: 8s
+      http:
+        preferred_ip_protocol: ip4
+        valid_status_codes: [200]
+        follow_redirects: false
+        fail_if_not_ssl: true
+        fail_if_body_not_matches_regexp:
+          - "(?i)<html"
+    osl_https_ready:
+      prober: http
+      timeout: 8s
+      http:
+        preferred_ip_protocol: ip4
+        valid_status_codes: [200]
+        follow_redirects: false
+        fail_if_not_ssl: true
+        fail_if_body_not_matches_regexp:
+          - '"status"\s*:\s*"ok"'
+    osl_internal_website:
+      prober: http
+      timeout: 8s
+      http:
+        preferred_ip_protocol: ip4
+        valid_status_codes: [200]
+        follow_redirects: false
+        fail_if_body_not_matches_regexp:
+          - "(?i)<html"
+    osl_internal_ready:
+      prober: http
+      timeout: 8s
+      http:
+        preferred_ip_protocol: ip4
+        valid_status_codes: [200]
+        follow_redirects: false
+        fail_if_body_not_matches_regexp:
+          - '"status"\s*:\s*"ok"'
+    osl_https_auth_gate:
+      prober: http
+      timeout: 8s
+      http:
+        preferred_ip_protocol: ip4
+        valid_status_codes: [401]
+        follow_redirects: false
+        fail_if_not_ssl: true
+        fail_if_header_not_matches:
+          - header: WWW-Authenticate
+            regexp: '(?i)^Basic\s+'
+
+serviceMonitor:
+  selfMonitor:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack
+  enabled: true
+  defaults:
+    labels:
+      release: kube-prometheus-stack
+    interval: 30s
+    scrapeTimeout: 10s
+    additionalRelabeling:
+      - targetLabel: osl_probe
+        replacement: "true"
+  targets:
+    - name: production-website
+      url: https://openstreetlifting.org/
+      module: osl_https_website
+      # Target relabeling also labels Prometheus-generated up metrics.
+      # Override the exporter's namespace with the application namespace.
+      additionalRelabeling:
+        - targetLabel: namespace
+          replacement: osl
+        - targetLabel: environment
+          replacement: production
+        - targetLabel: component
+          replacement: website
+        - targetLabel: scope
+          replacement: public
+        - targetLabel: probe
+          replacement: production-website
+    - name: production-api
+      url: https://api.openstreetlifting.org/health/ready
+      module: osl_https_ready
+      additionalRelabeling:
+        - targetLabel: namespace
+          replacement: osl
+        - targetLabel: environment
+          replacement: production
+        - targetLabel: component
+          replacement: api
+        - targetLabel: scope
+          replacement: public
+        - targetLabel: probe
+          replacement: production-api
+    - name: staging-website
+      url: http://openstreetlifting-frontend.osl-staging.svc.cluster.local:3000/
+      module: osl_internal_website
+      additionalRelabeling:
+        - targetLabel: namespace
+          replacement: osl-staging
+        - targetLabel: environment
+          replacement: staging
+        - targetLabel: component
+          replacement: website
+        - targetLabel: scope
+          replacement: internal
+        - targetLabel: probe
+          replacement: staging-website
+    - name: staging-api
+      url: http://openstreetlifting-backend.osl-staging.svc.cluster.local:8080/health/ready
+      module: osl_internal_ready
+      additionalRelabeling:
+        - targetLabel: namespace
+          replacement: osl-staging
+        - targetLabel: environment
+          replacement: staging
+        - targetLabel: component
+          replacement: api
+        - targetLabel: scope
+          replacement: internal
+        - targetLabel: probe
+          replacement: staging-api
+    - name: staging-website-auth
+      url: https://staging.openstreetlifting.org/
+      module: osl_https_auth_gate
+      additionalRelabeling:
+        - targetLabel: namespace
+          replacement: osl-staging
+        - targetLabel: environment
+          replacement: staging
+        - targetLabel: component
+          replacement: website
+        - targetLabel: scope
+          replacement: auth-gate
+        - targetLabel: probe
+          replacement: staging-website-auth
+    - name: staging-api-auth
+      url: https://api-staging.openstreetlifting.org/health/ready
+      module: osl_https_auth_gate
+      additionalRelabeling:
+        - targetLabel: namespace
+          replacement: osl-staging
+        - targetLabel: environment
+          replacement: staging
+        - targetLabel: component
+          replacement: api
+        - targetLabel: scope
+          replacement: auth-gate
+        - targetLabel: probe
+          replacement: staging-api-auth

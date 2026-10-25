@@ -29,6 +29,13 @@ jobs:
         run: helm lint helm/umami-secrets
       - name: Lint osl-postgres
         run: helm lint helm/osl-postgres
+      - name: Lint OSL probe configuration
+        run: |
+          helm pull prometheus-blackbox-exporter \
+            --repo https://prometheus-community.github.io/helm-charts \
+            --version 11.20.2 --untar --untardir "$RUNNER_TEMP"
+          helm lint "$RUNNER_TEMP/prometheus-blackbox-exporter" \
+            -f helm/prometheus-blackbox-exporter/values.yaml
   kube-validate:
     name: Kubernetes Validation
     runs-on: ubuntu-latest
@@ -59,7 +66,18 @@ jobs:
         run: |
           helm template helm/osl-postgres \
             | kubeconform -strict -summary -output json \
-              -skip Cluster
+              -skip Cluster,PodMonitor
+      - name: Validate OSL probes
+        run: |
+          helm pull prometheus-blackbox-exporter \
+            --repo https://prometheus-community.github.io/helm-charts \
+            --version 11.20.2 --untar --untardir "$RUNNER_TEMP"
+          helm template prometheus-blackbox-exporter \
+            "$RUNNER_TEMP/prometheus-blackbox-exporter" \
+            --namespace monitoring \
+            -f helm/prometheus-blackbox-exporter/values.yaml \
+            | kubeconform -strict -summary -output json \
+              -skip ServiceMonitor
       - name: Validate ArgoCD applications
         run: |
           kubeconform -strict -summary -output json \
