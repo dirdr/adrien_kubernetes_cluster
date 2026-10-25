@@ -7,3 +7,8 @@ cluster:
     size: 10Gi
   database: appdb
   owner: appuser
+
+monitoring:
+  enabled: true
+  labels:
+    release: kube-prometheus-stack

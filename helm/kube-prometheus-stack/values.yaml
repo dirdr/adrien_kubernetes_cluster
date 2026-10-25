@@ -50,6 +50,10 @@ grafana:
 
 prometheus:
   prometheusSpec:
+    retention: 35d
+    # Leave room for the WAL and head chunks on the 20Gi volume.
+    # Size retention can shorten history before the time limit is reached.
+    retentionSize: 16GB
     storageSpec:
       volumeClaimTemplate:
         spec:
