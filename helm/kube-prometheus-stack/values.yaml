@@ -17,7 +17,9 @@ grafana:
   additionalDataSources:
     - name: Loki
       type: loki
-      uid: loki
+      # Preserve the UID already provisioned in Grafana's database.
+      # Changing it makes Grafana fail datasource updates during startup.
+      uid: P8E80F9AEF21F6940
       jsonData:
         derivedFields:
           - name: TraceID
@@ -33,7 +35,7 @@ grafana:
       access: proxy
       jsonData:
         tracesToLogsV2:
-          datasourceUid: loki
+          datasourceUid: P8E80F9AEF21F6940
           tags:
             - key: service.name
               value: service_name
