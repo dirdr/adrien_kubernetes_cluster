@@ -34,6 +34,10 @@ grafana:
       url: http://tempo.monitoring.svc.cluster.local:3200
       access: proxy
       jsonData:
+        serviceMap:
+          datasourceUid: prometheus
+        nodeGraph:
+          enabled: true
         tracesToLogsV2:
           datasourceUid: P8E80F9AEF21F6940
           tags:
@@ -52,6 +56,7 @@ grafana:
 
 prometheus:
   prometheusSpec:
+    enableRemoteWriteReceiver: true
     retention: 35d
     # Leave room for the WAL and head chunks on the 20Gi volume.
     # Size retention can shorten history before the time limit is reached.

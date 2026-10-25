@@ -36,6 +36,12 @@ jobs:
             --version 11.20.2 --untar --untardir "$RUNNER_TEMP"
           helm lint "$RUNNER_TEMP/prometheus-blackbox-exporter" \
             -f helm/prometheus-blackbox-exporter/values.yaml
+      - name: Lint Tempo metrics generation
+        run: |
+          helm pull tempo \
+            --repo https://grafana-community.github.io/helm-charts \
+            --version 3.1.0 --untar --untardir "$RUNNER_TEMP"
+          helm lint "$RUNNER_TEMP/tempo" -f helm/tempo/values.yaml
   kube-validate:
     name: Kubernetes Validation
     runs-on: ubuntu-latest
