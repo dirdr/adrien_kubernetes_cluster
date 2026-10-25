@@ -1,5 +1,28 @@
 tempo:
   retention: 168h
+  metricsGenerator:
+    enabled: true
+    remoteWriteUrl: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090/api/v1/write
+    storage:
+      path: /var/tempo/metrics
+    registry:
+      collection_interval: 15s
+      external_labels:
+        source: tempo
+    processor:
+      service_graphs:
+        # Keep staging and production separate despite identical service names.
+        dimensions:
+          - deployment.environment.name
+      span_metrics:
+        dimensions:
+          - deployment.environment.name
+  overrides:
+    defaults:
+      metrics_generator:
+        processors:
+          - service-graphs
+          - span-metrics
   storage:
     trace:
       backend: local
