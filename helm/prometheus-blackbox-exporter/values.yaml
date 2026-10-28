@@ -16,7 +16,7 @@ config:
       http:
         preferred_ip_protocol: ip4
         valid_status_codes: [200]
-        follow_redirects: false
+        follow_redirects: true
         fail_if_not_ssl: true
         fail_if_body_not_matches_regexp:
           - "(?i)<html"
@@ -36,7 +36,7 @@ config:
       http:
         preferred_ip_protocol: ip4
         valid_status_codes: [200]
-        follow_redirects: false
+        follow_redirects: true
         fail_if_body_not_matches_regexp:
           - "(?i)<html"
     osl_internal_ready:
