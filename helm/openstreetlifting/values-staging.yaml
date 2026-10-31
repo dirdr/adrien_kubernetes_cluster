@@ -17,7 +17,7 @@ backend:
     labels:
       release: kube-prometheus-stack
   image:
-    tag: "sha-5d28fd9"
+    tag: "sha-855a9e7"
   existingSecret: ""
   resources:
     limits:
@@ -25,7 +25,7 @@ backend:
       memory: 128Mi
 importer:
   image:
-    tag: "sha-5d28fd9"
+    tag: "sha-855a9e7"
   args:
     - competitions
     - ./data/competitions
