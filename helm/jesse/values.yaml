@@ -1,7 +1,7 @@
 backend:
   image:
     repository: ghcr.io/dirdr/jesse-backend
-    tag: sha-b8cf9ca8e2191a9c739570fd77791ca2f59c6977
+    tag: sha-24af3dc3667e18036a6933736de5e638daf005d1
   secretName: jesse-env
   resources:
     requests:
@@ -14,7 +14,7 @@ backend:
 frontend:
   image:
     repository: ghcr.io/dirdr/jesse-frontend
-    tag: sha-b8cf9ca8e2191a9c739570fd77791ca2f59c6977
+    tag: sha-24af3dc3667e18036a6933736de5e638daf005d1
   resources:
     requests:
       cpu: 50m
