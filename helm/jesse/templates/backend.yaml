@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jesse-backend
+  labels:
+    app.kubernetes.io/name: jesse-backend
+    app.kubernetes.io/part-of: jesse
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jesse-backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jesse-backend
+        app.kubernetes.io/part-of: jesse
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 45
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8765
+          envFrom:
+            - secretRef:
+                name: {{ .Values.backend.secretName }}
+          env:
+            - name: JESSE_ALLOWED_HOSTS
+              value: {{ .Values.ingress.host | quote }}
+            - name: JESSE_PUBLIC_URL
+              value: "https://{{ .Values.ingress.host }}"
+          resources:
+            {{- toYaml .Values.backend.resources | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: localhost
+            periodSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: localhost
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: localhost
+            periodSeconds: 20
+          volumeMounts:
+            - name: runs
+              mountPath: /data
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: runs
+          persistentVolumeClaim:
+            claimName: jesse-runs
+        - name: tmp
+          emptyDir:
+            sizeLimit: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jesse-backend
+spec:
+  selector:
+    app.kubernetes.io/name: jesse-backend
+  ports:
+    - name: http
+      port: 8765
+      targetPort: http
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jesse-runs
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ .Values.persistence.storageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size }}

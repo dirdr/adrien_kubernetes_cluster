@@ -1,0 +1,36 @@
+backend:
+  image:
+    repository: ghcr.io/dirdr/jesse-backend
+    tag: sha-f9add7496a2ff1ccf343d02834f04c09a6aafd7d
+  secretName: jesse-env
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+
+frontend:
+  image:
+    repository: ghcr.io/dirdr/jesse-frontend
+    tag: sha-f9add7496a2ff1ccf343d02834f04c09a6aafd7d
+  resources:
+    requests:
+      cpu: 50m
+      memory: 32Mi
+    limits:
+      cpu: 250m
+      memory: 128Mi
+
+imagePullSecrets: []
+
+persistence:
+  size: 5Gi
+  storageClass: local-path
+
+ingress:
+  host: jesse.adrienpelfresne.com
+  className: traefik
+  certificateResolver: letsencrypt
+  authSecretName: jesse-auth
