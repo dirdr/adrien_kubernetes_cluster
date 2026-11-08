@@ -58,8 +58,7 @@ jobs:
       - name: Validate jesse
         run: |
           helm template jesse helm/jesse --namespace jesse \
-            | kubeconform -strict -summary -output json \
-              -skip Middleware
+            | kubeconform -strict -summary -output json
       - name: Validate utazon-backend
         run: |
           helm template helm/utazon-backend \

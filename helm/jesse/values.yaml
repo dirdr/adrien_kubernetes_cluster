@@ -33,4 +33,3 @@ ingress:
   host: jesse.adrienpelfresne.com
   className: traefik
   certificateResolver: letsencrypt
-  authSecretName: jesse-auth
