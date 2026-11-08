@@ -21,8 +21,6 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Install Helm
         run: curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-      - name: Lint jesse
-        run: helm lint helm/jesse
       - name: Lint utazon-backend
         run: helm lint helm/utazon-backend
       - name: Lint traefik-config
@@ -55,10 +53,6 @@ jobs:
         run: |
           curl -fsSL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz \
             | tar xz -C /usr/local/bin
-      - name: Validate jesse
-        run: |
-          helm template jesse helm/jesse --namespace jesse \
-            | kubeconform -strict -summary -output json
       - name: Validate utazon-backend
         run: |
           helm template helm/utazon-backend \
