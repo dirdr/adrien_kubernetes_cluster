@@ -6,7 +6,7 @@ telemetry:
   traceSampleRatio: "1.0"
 frontend:
   image:
-    tag: "sha-8ef6324"
+    tag: "sha-807d4bb"
   resources:
     limits:
       cpu: 250m
@@ -17,7 +17,7 @@ backend:
     labels:
       release: kube-prometheus-stack
   image:
-    tag: "sha-cdba91c"
+    tag: "sha-807d4bb"
   existingSecret: ""
   resources:
     limits:
@@ -25,7 +25,7 @@ backend:
       memory: 128Mi
 importer:
   image:
-    tag: "sha-cdba91c"
+    tag: "sha-807d4bb"
   args:
     - competitions
     - ./data/competitions
