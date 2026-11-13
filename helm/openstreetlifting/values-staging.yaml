@@ -25,7 +25,7 @@ backend:
       memory: 128Mi
 importer:
   image:
-    tag: "sha-d2f9048"
+    tag: "sha-e722b72"
   args:
     - competitions
     - ./data/competitions
