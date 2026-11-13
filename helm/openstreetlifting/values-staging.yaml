@@ -6,7 +6,7 @@ telemetry:
   traceSampleRatio: "1.0"
 frontend:
   image:
-    tag: "sha-d87432e"
+    tag: "sha-d2f9048"
   resources:
     limits:
       cpu: 250m
@@ -25,7 +25,7 @@ backend:
       memory: 128Mi
 importer:
   image:
-    tag: "sha-5cdb0fa"
+    tag: "sha-d2f9048"
   args:
     - competitions
     - ./data/competitions
