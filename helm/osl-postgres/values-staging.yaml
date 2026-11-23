@@ -3,3 +3,4 @@ cluster:
   # holds anything worth sizing for.
   storage:
     size: 5Gi
+  imageName: ghcr.io/cloudnative-pg/postgresql:19.0-system-trixie
