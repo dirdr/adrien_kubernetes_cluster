@@ -17,6 +17,12 @@ spec:
               scheme: https
               permanent: true
               priority: 10
+      websecure:
+        forwardedHeaders:
+          trustedIPs:
+            {{- range .Values.cloudflareIPs }}
+            - {{ . | quote }}
+            {{- end }}
     certificatesResolvers:
       letsencrypt:
         acme:
