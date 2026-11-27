@@ -31,3 +31,5 @@ ingress:
   frontendHost: "openstreetlifting.org"
   backendHost: "api.openstreetlifting.org"
   tls: true
+  rateLimit:
+    enabled: true
