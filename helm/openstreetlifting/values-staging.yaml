@@ -6,7 +6,7 @@ telemetry:
   traceSampleRatio: "1.0"
 frontend:
   image:
-    tag: "sha-26fc15a"
+    tag: "sha-897a56d"
   resources:
     limits:
       cpu: 250m
